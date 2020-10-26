@@ -1,0 +1,7 @@
+﻿[*.{cs,vb}]
+
+# IDE0060: Usuń nieużywany parametr
+dotnet_code_quality_unused_parameters = non_public:suggestion
+
+# IDE0059: Niepotrzebne przypisanie wartości
+csharp_style_unused_value_assignment_preference = unused_local_variable:suggestion

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GrafyZad1": {
+      "commandName": "Project",
+      "commandLineArgs": "graph.dt"
+    }
+  }
+}
