@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ASUS\\source\\repos\\GrafyZad1\\GrafyZad1\\GrafyZad1.csproj": {}
+    "C:\\Users\\ASUS\\Documents\\GitHub\\grafy_michal\\GrafyZad1\\GrafyZad1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ASUS\\source\\repos\\GrafyZad1\\GrafyZad1\\GrafyZad1.csproj": {
+    "C:\\Users\\ASUS\\Documents\\GitHub\\grafy_michal\\GrafyZad1\\GrafyZad1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\GrafyZad1\\GrafyZad1\\GrafyZad1.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS\\Documents\\GitHub\\grafy_michal\\GrafyZad1\\GrafyZad1.csproj",
         "projectName": "GrafyZad1",
-        "projectPath": "C:\\Users\\ASUS\\source\\repos\\GrafyZad1\\GrafyZad1\\GrafyZad1.csproj",
+        "projectPath": "C:\\Users\\ASUS\\Documents\\GitHub\\grafy_michal\\GrafyZad1\\GrafyZad1.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ASUS\\source\\repos\\GrafyZad1\\GrafyZad1\\obj\\",
+        "outputPath": "C:\\Users\\ASUS\\Documents\\GitHub\\grafy_michal\\GrafyZad1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

@@ -65,19 +65,19 @@ namespace GrafyZad1
             foreach (var item in GrafParsed.graf) //szukaj elementow wiszacych lub takich, ktore maja tylko wejscia - taki element napewno bedzie w zbiorze rozwiazan
             {
                 allNodes.Add(item.Key);
-                if (!item.Value.Any())//jesli element nie ma zadnych wyjsc, sprawdz czy ktorykolwiek element ma do niego wejscia
+                if (!item.Value.Any())
                 {
                     wynik.Add(item.Key);
-                    allNodes.Remove(item.Key);
+                    allNodes.Remove(item.Key); //allnodes zawiera wszystkie wierzcholki z wyjatkiem tych, ktore sa pewniakami wzgledem wyniku
                 }
             }
             Console.WriteLine(GrafParsed.graf.Count);
-            while (!finalCondition || !Enumerable.SequenceEqual(allNodes.OrderBy(e => e), rejectedNodes.OrderBy(e => e)))
+            while (!finalCondition || !Enumerable.SequenceEqual(allNodes.OrderBy(e => e), rejectedNodes.OrderBy(e => e))) //petla while ma dzialac do momentu w ktorym albo finalcondition bedzie prawidlowy, albo wszystkie wierzcholki zostaly juz wykluczone - wtedy nie ma rozwiazan
             {
                 Console.WriteLine("pierwsza faza");//pierwszy element 
                 for (int i = 0; i < GrafParsed.graf.Count; i++)
                 {
-                    if (!wynik.Any()) //jesli nie ma zadnych elementow wiszacych dodaj 0
+                    if (!wynik.Any()) //jesli nie ma zadnych elementow wiszacych dodaj pierwszy element z brzegu
                     {
                         var key = GrafParsed.graf.ElementAt(i).Key;
                         wynik.Add(key);
@@ -92,9 +92,9 @@ namespace GrafyZad1
                         warunek = false;
                         foreach (var item in wynik)
                         {
-                            if (!GrafParsed.graf[i].Contains(item))
+                            if (!GrafParsed.graf[i].Contains(item))//czy badany wierzcholek jest polaczony z elementem z wyniku?
                             {
-                                if (!GrafParsed.graf[item].Contains(i))
+                                if (!GrafParsed.graf[item].Contains(i))//czy element z wyniku jest polaczony z badanym wierzcholkiem?
                                 {
                                     warunek = true;
                                 }
@@ -112,7 +112,7 @@ namespace GrafyZad1
                         }
                         if (warunek)
                         {
-                            var key = GrafParsed.graf.ElementAt(i).Key;
+                            var key = GrafParsed.graf.ElementAt(i).Key;//jesli warunek zostal spelniony, dodaj ten element do wyniku
                             wynik.Add(key);
                             temp.Add(key);
                             Console.WriteLine("added element: " + key);
@@ -126,27 +126,27 @@ namespace GrafyZad1
                     Console.WriteLine(item);
                 }
                 Console.WriteLine("trzecia faza");
-                foreach (var item in GrafParsed.graf) // sprawdz wynik
+                foreach (var item in GrafParsed.graf) // sprawdzanie wyniku
                 {
                     finalCondition = true;
                     if (wynik.Contains(item.Key))
                     {
                         continue;
                     }
-                    else if (item.Value.Intersect(wynik).Any()) //wartosci z grafu musza miec w sobie wynik
-                    {
+                    else if (item.Value.Intersect(wynik).Any()) //sprawdz czy badany wierzcholek grafu jest polaczony z ktorymkolwiek elementem z wyniku
+                    {                                           //intersect tworzy czesc wspolna - jesli values tego wierzcholka maja jakakolwiek czesc wspolna z wynikiem, tzn że jest ten element polaczony
                         continue;
                     }
                     else
                     {
-                        finalCondition = false;
+                        finalCondition = false; //jesli ktorys z elementow nie jest polaczony, finalcondition jest false
                         foreach (var item2 in temp)
                         {
-                            wynik.Remove(item2);
+                            wynik.Remove(item2);//wszystkie elementy ktore nie sa pewniakami wywal z wyniku
                             rejectedNodes.Add(item2); //dodaj je do listy wykluczonych wierzcholkow
                         }
                         temp.Clear();//wyczysc liste tymczasowych wierzcholkow
-                        break;
+                        break; //przerwij petle
                     }
 
                 }
