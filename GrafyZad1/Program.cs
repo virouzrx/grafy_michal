@@ -18,8 +18,11 @@ namespace GrafyZad1
         public static Regex edgeRegex = new Regex("^[0-9]*\x20->\x20[0-9]*;$");
         public static List<int> wynik = new List<int>();
         public static List<int> temp = new List<int>();
-        public static List<int> floatingNodes = new List<int>();
+        public static List<int> rejectedNodes = new List<int>();
+        public static List<int> allNodes = new List<int>();
         public static Dictionary<int, List<int>> removedNodes = new Dictionary<int, List<int>>();
+        public static bool warunek = false;
+        public static bool finalCondition = false;
 
         public static void ParseGrafu(string source)
         {
@@ -59,70 +62,115 @@ namespace GrafyZad1
             stopwatch.Start();
             ParseGrafu(args[0]);
 
-            foreach (var item in GrafParsed.graf) //szukaj elementow wiszacych
+            foreach (var item in GrafParsed.graf) //szukaj elementow wiszacych lub takich, ktore maja tylko wejscia - taki element napewno bedzie w zbiorze rozwiazan
             {
+                allNodes.Add(item.Key);
                 if (!item.Value.Any())//jesli element nie ma zadnych wyjsc, sprawdz czy ktorykolwiek element ma do niego wejscia
                 {
-                    var tmp = item.Key; //wierzcholek ktory nie ma wyjsc
-                    var condition = true;
-                    foreach (var item2 in GrafParsed.graf)
-                    {
-                        if (item2.Value.Contains(tmp)) //sprawdzanie, czy wierzcholek ma wejscia
-                        {
-                            condition = false;
-                        }
-                    }
-                    if (condition)
-                    {
-                        floatingNodes.Add(tmp);
-                        GrafParsed.graf.Remove(tmp);
-                    }
+                    wynik.Add(item.Key);
+                    allNodes.Remove(item.Key);
                 }
             }
-            foreach (var item in GrafParsed.graf.Keys)
+            Console.WriteLine(GrafParsed.graf.Count);
+            while (!finalCondition || !Enumerable.SequenceEqual(allNodes.OrderBy(e => e), rejectedNodes.OrderBy(e => e)))
             {
-                Console.WriteLine(item);
-            }
-            //pierwszy element 
-            try
-            {
+                Console.WriteLine("pierwsza faza");//pierwszy element 
                 for (int i = 0; i < GrafParsed.graf.Count; i++)
                 {
-                    if (!temp.Any())
+                    if (!wynik.Any()) //jesli nie ma zadnych elementow wiszacych dodaj 0
                     {
                         var key = GrafParsed.graf.ElementAt(i).Key;
-                        temp.Add(key);
+                        wynik.Add(key);
+                    }
+                    else if (wynik.Contains(GrafParsed.graf.ElementAt(i).Key) || rejectedNodes.Contains(GrafParsed.graf.ElementAt(i).Key))
+                    {
+                        continue; //jesli ten element jest juz w wyniku lub elemenet zostal odrzucony, pomin
                     }
                     else
                     {
-
-                        for (int j = 0; j < temp.Count; j++)
+                        Console.WriteLine("druga faza");
+                        warunek = false;
+                        foreach (var item in wynik)
                         {
-                            if (!GrafParsed.graf[j].Contains(i))
+                            if (!GrafParsed.graf[i].Contains(item))
                             {
-                                if (!GrafParsed.graf[i].Contains(j))
+                                if (!GrafParsed.graf[item].Contains(i))
                                 {
-                                    if (!temp.Contains(i))
-                                    {
-                                        var key = GrafParsed.graf.ElementAt(i).Key;
-                                        temp.Add(key);
-                                    }
+                                    warunek = true;
                                 }
-
+                                else
+                                {
+                                    warunek = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                warunek = false;
+                                break;
                             }
                         }
+                        if (warunek)
+                        {
+                            var key = GrafParsed.graf.ElementAt(i).Key;
+                            wynik.Add(key);
+                            temp.Add(key);
+                            Console.WriteLine("added element: " + key);
+                        }
+                        else continue;
                     }
+                    Console.ReadKey();
+                }
+                foreach (var item in wynik)
+                {
+                    Console.WriteLine(item);
+                }
+                Console.WriteLine("trzecia faza");
+                foreach (var item in GrafParsed.graf) // sprawdz wynik
+                {
+                    finalCondition = true;
+                    if (wynik.Contains(item.Key))
+                    {
+                        continue;
+                    }
+                    else if (item.Value.Intersect(wynik).Any()) //wartosci z grafu musza miec w sobie wynik
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        finalCondition = false;
+                        foreach (var item2 in temp)
+                        {
+                            wynik.Remove(item2);
+                            rejectedNodes.Add(item2); //dodaj je do listy wykluczonych wierzcholkow
+                        }
+                        temp.Clear();//wyczysc liste tymczasowych wierzcholkow
+                        break;
+                    }
+
+                }
+                Console.ReadKey();
+            }
+            if (finalCondition == true)
+            {
+                foreach (var item in wynik)
+                {
+                    Console.Write(item);
                 }
             }
-            catch (System.Collections.Generic.KeyNotFoundException)
+            else
             {
-            }
-            foreach (var item in temp)
-            {
-                Console.WriteLine(item);
+                Console.WriteLine("Brak rozwiązań dla danego zbioru");
+                foreach (var item in wynik)
+                {
+                    Console.WriteLine(item);
+                }
             }
         }
     }
 }
+
+
 
 
